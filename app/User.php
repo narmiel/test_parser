@@ -1,14 +1,34 @@
 <?php
 
+// Todo: move to Models/ namespace
 namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * @property int         $id
+ * @property int         $external_id
+ * @property string      $email
+ * @property string      $first_name
+ * @property string      $last_name
+ * @property string      $cart_number
+ * @property string      $password
+ *
+ * @property Carbon      $created_at
+ * @property Carbon      $updated_at
+ * @property Carbon|null $deleted_at
+ *
+ * @mixin Builder
+ */
 class User extends Authenticatable
 {
     use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,20 +40,15 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'id' => 'int',
+        'external_id' => 'int',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 }
